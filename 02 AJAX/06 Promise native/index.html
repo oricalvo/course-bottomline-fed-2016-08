@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <button class="get">Get</button>
+
+    <script src="jquery.js"></script>
+    <script>
+
+        $("button").click(function() {
+            BL.getAllContacts().then(function(contacts) {
+                console.log(JSON.stringify(contacts));
+            }).catch(function(err) {
+                console.log("ERROR: " + err.message);
+            });
+        });
+
+        Reactive Programming
+
+        $("button").click().then(function() {
+        });
+
+        function tran(contacts) {
+            //throw new Error("Oops");
+
+            return contacts.map(function(contact) {
+                contact.email = contact.name + "@gmail.com";
+                return contact;
+            });
+        }
+
+        var BL = {
+            getAllContacts: function() {
+                return DAL.getAllContacts()
+                        .map(x => x*2)
+                        .filter(x => x> 10)
+                        .reduceArray();
+            }
+        }
+
+        var DAL = {
+            getAllContacts: function() {
+                var p1 =  Network.http({
+                    type: "GET",
+                    url: "contacts.json",
+                });
+
+                var p2 =  Network.http({
+                    type: "GET",
+                    url: "emails.json",
+                });
+
+//                p.then(function() {
+//                }, function() {
+//                }, function () {
+//                });
+
+                return Promise.all([p1, p2]).then(function(res) {
+                    var contacts = res[0];
+                    var emails = res[1];
+
+                    return contacts;
+                });
+            }
+        };
+
+        var Network = {
+            http: function(options) {
+                return new Promise(function(resolve, reject) {
+                    setTimeout(function() {
+                        var data = [
+                            {id: 1, name: "Ori"},
+                        ];
+
+                        resolve(data);
+                    }, 1500);
+                });
+            }
+        };
+    </script>
+</body>
+</html>

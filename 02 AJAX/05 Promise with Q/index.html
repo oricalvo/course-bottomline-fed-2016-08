@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <button class="get">Get</button>
+
+    <script src="jquery.js"></script>
+    <script src="q.js"></script>
+    <script>
+
+        $("button").click(function() {
+            BL.getAllContacts().then(function(contacts) {
+                console.log(JSON.stringify(contacts));
+            }).catch(function(err) {
+                console.log("ERROR: " + err.message);
+            });
+        });
+
+        function tran(contacts) {
+            //throw new Error("Oops");
+
+            return contacts.map(function(contact) {
+                contact.email = contact.name + "@gmail.com";
+                return contact;
+            });
+        }
+
+        var BL = {
+            getAllContacts: function() {
+                return DAL.getAllContacts().then(tran);
+            }
+        }
+
+        var DAL = {
+            getAllContacts: function() {
+                var p1 =  Network.http({
+                    type: "GET",
+                    url: "contacts.json",
+                });
+
+                var p2 =  Network.http({
+                    type: "GET",
+                    url: "emails.json",
+                });
+
+                return Q.all([p1, p2]).then(function(res) {
+                    var contacts = res[0];
+                    var emails = res[1];
+
+                    return contacts;
+                });
+            }
+        };
+
+        var Network = {
+            http: function(options) {
+                var deferred = Q.defer();
+
+                setTimeout(function() {
+                    var data = [
+                        {id: 1, name: "Ori"},
+                    ];
+
+                    //return Q.when();
+
+                    deferred.resolve(data);
+                }, 1500);
+
+                return deferred.promise;
+
+
+//                return $.ajax({
+//                    type: options.type,
+//                    url: options.url,
+//                }).catch(function(xhr) {
+//                    throw new Error("AJAX error");
+//                });
+            }
+        };
+    </script>
+</body>
+</html>

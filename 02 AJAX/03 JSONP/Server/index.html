@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <button class="send">Send</button>
+    <button class="get">Get</button>
+
+    <script src="jquery.js"></script>
+    <script>
+        $("button.get").click(function() {
+            $.ajax({
+                type: "GET",
+                url: "http://google.com/contacts.json",
+                dataType: "json",
+                success: function(contacts) {
+                    console.log("data arrived");
+
+                    console.log(contacts);
+                },
+                error: function() {
+                    console.log("ERROR");
+                    console.log(arguments);
+                }
+            });
+        });
+
+        $("button.send").click(function() {
+            var contact = {id:1, name: "Udi"};
+
+            $.ajax({
+                type: "POST",
+                url: "/api/contact",
+                data: JSON.stringify(contact),
+                success: function(contacts) {
+                    console.log("data arrived");
+                },
+                error: function() {
+                    console.log("ERROR");
+                }
+            });
+        });
+    </script>
+</body>
+</html>
