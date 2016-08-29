@@ -1,0 +1,13 @@
+<h1>App Component</h1>
+
+<ul>
+    <li ng-repeat="contact in $ctrl.contacts">
+        <contact-details
+                contact="contact"
+                on-delete="$ctrl.removeContact($index)"
+                on-select="$ctrl.selectContact(contact)">
+        </contact-details>
+    </li>
+</ul>
+
+<button ng-click="$ctrl.doSomething()">Click me</button>

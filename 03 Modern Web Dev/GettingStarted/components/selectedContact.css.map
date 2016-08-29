@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAAA,gBAAiB;EACf,OAAO,EAAE,KAAK",
+"sources": ["selectedContact.scss"],
+"names": [],
+"file": "selectedContact.css"
+}
